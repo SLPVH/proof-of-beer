@@ -1,0 +1,9 @@
+.DS_Store
+/node_modules/
+/src/node_modules/@sapper/
+yarn-error.log
+/cypress/screenshots/
+/__sapper__/
+package-lock.json
+functions/__sapper__/build/*
+functions/firebase-debug.log
