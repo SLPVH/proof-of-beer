@@ -43,4 +43,6 @@ async function test(dst_slpaddr) {
         console.error(err)
     }
 }
+
+exports.mint = mintbeer
 // test("simpleledger:qqv9hfwy5jfmuz5gnyrqf7u6snqk4gk0jv829es2kz")

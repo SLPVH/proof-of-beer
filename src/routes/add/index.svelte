@@ -1,7 +1,19 @@
+<script>
+    import fire from '../../utils/fire'
+    const add_beer = fire.default.functions().httpsCallable('add_beer')
+    
+    let quantity="", dst_slpaddr=""
+
+    const handleClick = async () => {
+        console.log(quantity, dst_slpaddr)
+        const txio = await add_beer({quantity, dst_slpaddr})
+        console.log(txio)
+    }
+</script>
 <h2>Add Beer</h2>
 <p>How many?</p>
-<input type=number/>
+<input bind:value="{quantity}" type=number/>
 <p>BCH address:</p>
-<input/>
+<input bind:value="{dst_slpaddr}"/>
 <p>-------------------</p>
-<button>Add</button>
+<button on:click="{handleClick}">Add</button>

@@ -3,11 +3,11 @@
     console.log(fire.default)
     const create_token = fire.default.functions().httpsCallable('create_token')
     
-    let name="", ticker="", url="", price=0, priv="L4BwXDmjzEyzKHbAfGruhieUDPs8KTx7DMgqPk4aF9GefzgqPENV"
+    let name="", ticker="", url="", price=0
 
     const handleClick = async () => {
         console.log(name, ticker, url, price)
-        const txio = await create_token({privkey_wif:priv, token_name:name, token_symbol:ticker})
+        const txio = await create_token({token_name:name, token_symbol:ticker})
         console.log(txio)
     }
 </script>

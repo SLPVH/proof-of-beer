@@ -105,4 +105,6 @@ async function test() {
     }
     catch (err) { console.log(err) }
 }
+
+exports.get_balance = get_bch_balance
 // test
