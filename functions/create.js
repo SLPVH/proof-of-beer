@@ -2,7 +2,7 @@ const util = require('./slputil')
 const SLP = util.get_slpsdk()
 
 /// Creates a new token for the event, but mints zero.
-async function create_event(privkey_wif, token_name, token_symbol) {
+async function create_event(privkey_wif, token_name, token_symbol, token_uri = "https://slp.dev !! PROOF OF BEER") {
 
     const [cashaddr, slpaddr] = util.priv_to_publickey(
         SLP, privkey_wif)
@@ -19,7 +19,7 @@ async function create_event(privkey_wif, token_name, token_symbol) {
         decimals: 0,
         name: token_name,
         symbol: token_symbol,
-        documentUri: "https://slp.dev !! PROOF OF BEER",
+        documentUri: token_uri,
         documentHash: null,
         initialTokenQty: 0
     }
