@@ -1,5 +1,5 @@
 <script>
-	import { authStore } from 'svelte/store'
+	import { authStore } from '../stores/auth'
 	export let segment;
 	
 </script>

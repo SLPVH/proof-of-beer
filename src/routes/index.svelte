@@ -32,13 +32,11 @@
 </script>
 
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Beer to FIAT gateway</title>
 </svelte:head>
 <script>
 	import fire from '../utils/fire'
     import {goto} from '@sapper/app'
-	console.log(fire)
-	console.log(fire.default.auth().currentUser == null)
     
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (user) {
@@ -50,7 +48,4 @@
 
 </script>
 <h1>Proof of beer</h1>
-<button>Start</button>
-<p>-------------------</p>
-<button>backup</button>
-<button>Recover</button>
+<p>//TODO: Insert QR code for buying beer</p>
