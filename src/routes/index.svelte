@@ -48,19 +48,9 @@
 		}
 	});
 
-	const signIn = () => fire.default.auth().signInWithEmailAndPassword("asd@asd.com", "asdasd").then(function(){
-		goto('.')
-	}).catch(function(error) {
-		// Handle Errors here.
-		var errorCode = error.code;
-		var errorMessage = error.message;
-		// ...
-		console.log(errorCode)
-		console.log(errorMessage)
-	})
 </script>
-<h1>Great success!</h1>
-<h2>HIGH FIVE BRO</h2>
-<button on:click={signIn}>sign in</button>
+<button>Start</button>
+<button>backup</button>
+<button>Recover</button>
 
 <p>asd</p>
