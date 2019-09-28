@@ -21,7 +21,7 @@
 			var errorCode = error.code;
 			var errorMessage = error.message;
 			// ...
-			uthStore.set({ authenticated: false})
+			authStore.set({ authenticated: false})
 			alert(errorMessage)
 		});
 		authStore.set({ authenticated: true})
@@ -81,9 +81,9 @@
   	<button on:click={signOut}> Sign out </button>
   {:else}
 	<p>Email:</p>
-	<input value={email} type="email" />
+	<input bind:value={email} type="email" />
 	<p>Password:</p>
-	<input value={password} type="password" />
+	<input bind:value={password} type="password" />
 	<button on:click={signIn}> Sign in </button>
   {/if}
 
