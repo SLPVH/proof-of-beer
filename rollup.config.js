@@ -29,6 +29,7 @@ export default {
 				emitCss: true
 			}),
 			resolve({
+				mainFields: [ 'main', 'module'],
 				browser: true,
 				dedupe
 			}),
