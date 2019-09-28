@@ -7,7 +7,8 @@
 
     const handleClick = async () => {
         console.log(name, ticker, url, price)
-        await create_token({privkey_wif:priv, token_name:name, token_symbol:ticker})
+        const txio = await create_token({privkey_wif:priv, token_name:name, token_symbol:ticker})
+        console.log(txio)
     }
 </script>
 <p>Name:</p>
