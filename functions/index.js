@@ -11,14 +11,14 @@ exports.ssr = functions.https.onRequest((req, res) => {
     middleware(req, res);
 });
 
-exports.create_token = functions.https.onRequest(async (req, res) => {
+exports.create_token = functions.https.onCall(async (data, context) => {
     const txid = await create_event(
-        req.body.privkey_wif,
-        req.body.token_name,
-        req.body.token_symbol
+        data.privkey_wif,
+        data.token_name,
+        data.token_symbol
     ).catch((e)=>{
         console.log(e)
-        res.sendStatus(500)
+        res.sendStatus(e)
     }) 
     res.send(txid)
 })
