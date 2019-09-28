@@ -7,6 +7,7 @@ let slputil = require("./slputil")
 // We have to import the built version of the server middleware.
 const { sapper } = require('./__sapper__/build/server/server');
 const middleware = sapper.middleware();
+const request = require('request')
 
 const cors = require('cors')({
     origin: true
@@ -26,7 +27,7 @@ exports.create_token = functions.https.onCall(async (data, context) => {
         data.token_symbol
     ).catch((e)=>{
         console.log(e)
-        res.sendStatus(e)
+        return(e)
     }) 
     res.send(txid)
 })

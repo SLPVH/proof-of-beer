@@ -37,7 +37,9 @@
 <script>
 	import { authStore } from '../stores/auth'
 	import fire from '../utils/fire'
-    import {goto} from '@sapper/app'
+	import {goto} from '@sapper/app'
+
+	
     
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (user) {
