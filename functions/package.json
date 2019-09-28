@@ -12,13 +12,15 @@
     "node": "10"
   },
   "dependencies": {
+    "bitbox-sdk": "^8.8.0",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "firebase-admin": "^8.0.0",
     "firebase-functions": "^3.1.0",
     "polka": "^0.5.2",
     "sirv": "^0.4.2",
-    "slp-sdk": "^4.11.0"
+    "slp-sdk": "^4.11.0",
+    "slpjs": "^0.21.3"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.1.6"
