@@ -8,6 +8,12 @@ let slputil = require("./slputil")
 const { sapper } = require('./__sapper__/build/server/server');
 const middleware = sapper.middleware();
 
+const cors = require('cors')({
+    origin: true
+  });
+  
+admin.initializeApp()
+
 exports.ssr = functions.https.onRequest((req, res) => {
     req.baseUrl = '';
     middleware(req, res);
