@@ -41,5 +41,5 @@ async function test_create() {
     }
 }
 
-exports.create_event
+exports.create = create_event
 // test_create()
