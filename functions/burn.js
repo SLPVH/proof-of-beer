@@ -6,7 +6,7 @@ const BITBOXSDK = require('bitbox-sdk')
 const BITBOX = new BITBOXSDK.BITBOX({
     restURL: 'https://rest.bitcoin.com/v2/'
 });
-const bitboxNetwork = new slpjs.BitboxNetwork(BITBOX);
+const bitboxNetwork = new slpjs.BitboxNetwork(util.get_bitbox());
 
 
 

@@ -24,33 +24,29 @@
 <script context="module">
 	export async function preload(page, session) {
 
-		if (fire.default.auth().currentUser == null) {
-			return this.redirect(302, 'login');
+		if (fire.default.auth().currentUser != null) {
+			      authStore.set({ authenticated: true })
 		}
 		return "asd"
 	}
 </script>
 
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Beer to FIAT gateway</title>
 </svelte:head>
 <script>
+	import { authStore } from '../stores/auth'
 	import fire from '../utils/fire'
     import {goto} from '@sapper/app'
-	console.log(fire)
-	console.log(fire.default.auth().currentUser == null)
     
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (user) {
-			console.log("SIGNED IN")
+			      authStore.set({ authenticated: true })
 		} else {
-			goto('login')
+			      authStore.set({ authenticated: false })
 		}
 	});
 
 </script>
 <h1>Proof of beer</h1>
-<button>Start</button>
-<p>-------------------</p>
-<button>backup</button>
-<button>Recover</button>
+<p>//TODO: Insert QR code for buying beer</p>

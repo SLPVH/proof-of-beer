@@ -8,3 +8,4 @@ package-lock.json
 functions/__sapper__/build/*
 functions/firebase-debug.log
 firebase-debug.log
+yarn.lock
