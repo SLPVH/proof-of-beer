@@ -22,7 +22,6 @@
     "xmlhttprequest": "1.8.0",
     "sirv": "^0.4.0",
     "rxjs": "^6.5.3",
-    "sirv": "^0.4.0",
     "slp-sdk": "^4.11.0"
   },
   "devDependencies": {
