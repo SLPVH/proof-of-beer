@@ -89,10 +89,10 @@
 
 	<ul>
 		{#if $authStore.authenticated}
-		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "create" ? "selected" : ""}' href='create'>create token</a></li>
 		<li><a class='{segment === "add" ? "selected" : ""}' href='add'>add beer</a></li>
 		{/if}
+		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "about" ? "selected" : ""}' href='about'>about</a></li>
 		
 	</ul>
