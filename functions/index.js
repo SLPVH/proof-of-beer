@@ -12,7 +12,7 @@ const cors = require('cors')({
     origin: true
   });
   
-admin.initializeApp()
+firebase.initializeApp()
 
 exports.ssr = functions.https.onRequest((req, res) => {
     req.baseUrl = '';
@@ -34,7 +34,7 @@ exports.create_token = functions.https.onCall(async (data, context) => {
 exports.createUserData = functions.auth.user().onCreate((user) => {
     let SLP = slputil.get_slpsdk()
 
-    const private_key = function gen_privkey() {
+    function createPrivateKey() {
         let mnemonic = SLP.Mnemonic.generate()
         let rootseed = SLP.Mnemonic.toSeed(mnemonic)
         let hdnode = SLP.HDNode.fromSeed(rootseed)
@@ -42,11 +42,14 @@ exports.createUserData = functions.auth.user().onCreate((user) => {
         const privkey = SLP.HDNode.toWIF(account)
         return privkey
     }
+
+    const privateKey = createPrivateKey()
+    const userId = user.uid
     
-    const [cash_addr, slp_addr] = slputil.priv_to_publickey(SLP, private_key)
+    const [cash_addr, slp_addr] = slputil.priv_to_publickey(SLP, privateKey)
 
     firebase.database().ref('users/' + userId).set({
-        private_key: private_key,
+        private_key: privateKey,
         cash_addr: cash_addr,
         slp_addr: slp_addr,
         email: user.email
