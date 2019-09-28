@@ -12,6 +12,7 @@
     "node": "10"
   },
   "dependencies": {
+    "big.js": "^5.2.2",
     "bitbox-sdk": "^8.8.0",
     "compression": "^1.7.4",
     "express": "^4.17.1",
@@ -19,6 +20,7 @@
     "firebase-functions": "^3.1.0",
     "polka": "^0.5.2",
     "sirv": "^0.4.2",
+    "slp-list": "0.0.8",
     "slp-sdk": "^4.11.0",
     "slpjs": "^0.21.3"
   },
