@@ -35,6 +35,7 @@
 	<title>Beer to FIAT gateway</title>
 </svelte:head>
 <script>
+	import { authStore } from '../stores/auth'
 	import fire from '../utils/fire'
     import {goto} from '@sapper/app'
     

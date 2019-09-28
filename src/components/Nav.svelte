@@ -74,7 +74,7 @@
 	<input value={email} type="email" />
 	<p>Password:</p>
 	<input value={password} type="password" />
-	<button onclick="signin()"> Sign in </button>
+	<button onclick={signIn()}> Sign in </button>
   {/if}
 
 		
