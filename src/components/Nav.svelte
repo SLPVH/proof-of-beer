@@ -68,13 +68,13 @@
 
 <nav>
 {#if $authStore.authenticated}
-  	<button onclick={signOut()}></button> Sign out </button>
+  	<button on:click={signOut}> Sign out </button>
   {:else}
 	<p>Email:</p>
 	<input value={email} type="email" />
 	<p>Password:</p>
 	<input value={password} type="password" />
-	<button onclick={signIn()}> Sign in </button>
+	<button on:click={signIn}> Sign in </button>
   {/if}
 
 		
