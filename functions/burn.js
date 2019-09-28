@@ -53,4 +53,6 @@ async function test_burn() {
         console.error(err)
     }
 }
+
+exports.burn = burn_beer
 //test_burn()
