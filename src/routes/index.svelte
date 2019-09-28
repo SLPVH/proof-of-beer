@@ -24,8 +24,8 @@
 <script context="module">
 	export async function preload(page, session) {
 
-		if (fire.default.auth().currentUser == null) {
-			return this.redirect(302, 'login');
+		if (fire.default.auth().currentUser != null) {
+			      authStore.set({ authenticated: true })
 		}
 		return "asd"
 	}
@@ -42,9 +42,9 @@
     
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (user) {
-			console.log("SIGNED IN")
+			      authStore.set({ authenticated: true })
 		} else {
-			goto('login')
+			      authStore.set({ authenticated: false })
 		}
 	});
 

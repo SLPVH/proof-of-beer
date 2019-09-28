@@ -49,7 +49,17 @@
 </style>
 
 <nav>
+  {#if $authStore.authenticated === 'in'}
+	<p>Name:</p>
+	<input/>
+	<p>Ticker(optional):</p>
+	<input>
 	<ul>
+{:else}
+
+  {/if}
+
+
 		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "create" ? "selected" : ""}' href='create'>create token</a></li>
 		<li><a class='{segment === "add" ? "selected" : ""}' href='add'>add beer</a></li>
