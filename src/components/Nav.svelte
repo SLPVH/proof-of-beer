@@ -1,23 +1,33 @@
 <script>
 	import { authStore } from '../stores/auth'
 	import fire from '../utils/fire'
-	export let segment;
 
 	let email = ''
 	let password = ''
 
-	const signOut = () => {
-		fire.default.auth().signout()
+	const signOut = function() {
+		console.log("signOut")
+		fire.default.auth().signOut()
+		authStore.set({ authenticated: false})
 	}
 
-	const signIn = () => {
-		fire.default.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+	const signIn = function() {
+		console.log("signIn")
+		console.log(email)
+		console.log(password)
+		fire.default.auth().signInWithEmailAndPassword(email, password)
+		.catch((error) => {
 			// Handle Errors here.
 			var errorCode = error.code;
 			var errorMessage = error.message;
 			// ...
+			uthStore.set({ authenticated: false})
+			alert(errorMessage)
 		});
+		authStore.set({ authenticated: true})
 	}
+	export let segment;
+
 </script>
 
 <style>
@@ -77,13 +87,12 @@
 	<button on:click={signIn}> Sign in </button>
   {/if}
 
-		
 	<ul>
 		{#if $authStore.authenticated}
-		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "create" ? "selected" : ""}' href='create'>create token</a></li>
 		<li><a class='{segment === "add" ? "selected" : ""}' href='add'>add beer</a></li>
 		{/if}
+		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "about" ? "selected" : ""}' href='about'>about</a></li>
 		
 	</ul>
