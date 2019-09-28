@@ -1,3 +1,6 @@
+<script>
+    
+</script>
 <p>Name:</p>
 <input/>
 <p>Ticker(optional):</p>

@@ -40,4 +40,6 @@ async function test_create() {
         console.error(err)
     }
 }
+
+exports.create_event
 // test_create()
