@@ -1,20 +1,13 @@
 
-const SLPSDK = require('slp-sdk/lib/SLP')
-let SLP = new SLPSDK({ restURL: 'https://rest.bitcoin.com/v2/' })
-
-function priv_to_publickey(privkey_wif) {
-    let ecPair = SLP.ECPair.fromWIF(privkey_wif)
-    let cashAddress = SLP.ECPair.toCashAddress(ecPair)
-    let slpAddress = SLP.ECPair.toSLPAddress(ecPair)
-    return [cashAddress, slpAddress]
-}
+const util = require('./slputil')
+const SLP = util.get_slpsdk()
 
 // Mint quantity of tokenid to dst_addr.
 // * Minting baton needs to be in privkey.
 // * Privkey needs to hold BCH for fees.
 // * Privkey receives change
 async function mintbeer(tokenid, quantity, privkey_wif, dst_slpaddr) {
-    let [cashAddress, slpAddress] = priv_to_publickey(privkey_wif)
+    let [cashAddress, slpAddress] = util.priv_to_publickey(SLP, privkey_wif)
     console.log(cashAddress)
     console.log(slpAddress)
 
