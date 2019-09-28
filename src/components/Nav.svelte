@@ -1,5 +1,7 @@
 <script>
+	import { authStore } from 'svelte/store'
 	export let segment;
+	
 </script>
 
 <style>
@@ -49,20 +51,23 @@
 </style>
 
 <nav>
-  {#if $authStore.authenticated === 'in'}
+{#if $authStore.authenticated}
+  	<button> Sign out </button>
+  {:else}
 	<p>Name:</p>
 	<input/>
 	<p>Ticker(optional):</p>
-	<input>
-	<ul>
-{:else}
-
+	<input />
+	<button> Sign in </button>
   {/if}
 
-
+		
+	<ul>
+		{#if $authStore.authenticated}
 		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "create" ? "selected" : ""}' href='create'>create token</a></li>
 		<li><a class='{segment === "add" ? "selected" : ""}' href='add'>add beer</a></li>
+		{/if}
 		<li><a class='{segment === "about" ? "selected" : ""}' href='about'>about</a></li>
 		
 	</ul>
