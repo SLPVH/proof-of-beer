@@ -1,7 +1,23 @@
 <script>
 	import { authStore } from '../stores/auth'
+	import fire from '../utils/fire'
 	export let segment;
-	
+
+	let email = ''
+	let password = ''
+
+	const signOut = () => {
+		fire.default.auth().signout()
+	}
+
+	const signIn = () => {
+		fire.default.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+			// Handle Errors here.
+			var errorCode = error.code;
+			var errorMessage = error.message;
+			// ...
+		});
+	}
 </script>
 
 <style>
@@ -52,13 +68,13 @@
 
 <nav>
 {#if $authStore.authenticated}
-  	<button> Sign out </button>
+  	<button onclick="signOut()"> Sign out </button>
   {:else}
-	<p>Name:</p>
-	<input/>
-	<p>Ticker(optional):</p>
-	<input />
-	<button> Sign in </button>
+	<p>Email:</p>
+	<input value={email} type="email" />
+	<p>Password:</p>
+	<input value={password} type="password" />
+	<button onclick="signin()"> Sign in </button>
   {/if}
 
 		
