@@ -48,7 +48,7 @@ exports.createUserData = functions.auth.user().onCreate((user) => {
     
     const [cash_addr, slp_addr] = slputil.priv_to_publickey(SLP, privateKey)
 
-    firebase.database().ref('users/' + userId).set({
+    return firebase.database().ref('users/' + userId).set({
         private_key: privateKey,
         cash_addr: cash_addr,
         slp_addr: slp_addr,
