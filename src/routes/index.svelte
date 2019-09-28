@@ -49,8 +49,8 @@
 	});
 
 </script>
+<h1>Proof of beer</h1>
 <button>Start</button>
+<p>-------------------</p>
 <button>backup</button>
 <button>Recover</button>
-
-<p>asd</p>
