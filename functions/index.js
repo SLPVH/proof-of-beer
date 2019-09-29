@@ -4,6 +4,7 @@ const express = require('express');
 const create_event = require('./create.js').create;
 const mint_beer = require('./mint').mint
 const burn_beer = require('./burn').burn
+const airdrop = require('./dropbch').airdrop
 let slputil = require("./slputil")
 
 // We have to import the built version of the server middleware.
@@ -68,16 +69,25 @@ exports.mint_beer = functions.https.onCall(async (data, context) => {
 
 exports.end_event = functions.https.onCall(async (data, context) => {
     let user
+
     await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
         user = d.val()
     })
-    const txid = await burn_beer(user.private_key, user.event.txid).catch(e=>{
+
+    const burn_txid = await burn_beer(user.private_key, user.event.txid).catch(e=>{
         console.log(e)
         return ({error:e})
     })
+
+    const drop_txid = await airdrop(user.private_key, user.event.txid).catch(e=>{
+        console.log(e)
+        return({error:e})
+    })
+
     await admin.database().ref('users').child(context.auth.uid).child('event')
     .set({eventName: "eventName"})
-    return ({txid})
+    
+    return ({burn_txid, drop_txid})
 })
 
 exports.createUserData = functions.auth.user().onCreate((user) => {

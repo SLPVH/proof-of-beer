@@ -15,7 +15,7 @@ const FEE = 5000 // fixme, calc fee
 const DUST_LIMIT = 1000
 
 
-async function get_bch_balance(privkey) {
+async function get_bch_balance(privkey, tokenid) {
     const [cashaddr, _] = slputil.priv_to_publickey(SLP, privkey)
 
    const utxos = await bitboxNetwork.getAllSlpBalancesAndUtxos(cashaddr)
@@ -24,7 +24,8 @@ async function get_bch_balance(privkey) {
    inputs.forEach((input) => {
         balance += BITBOX.BitcoinCash.toSatoshi(input['amount'])
    })
-   return balance
+   const token_balance = utxos.slpTokenBalances[tokenid]
+   return [balance, token_balance]
 
 }
 
@@ -34,11 +35,14 @@ async function airdrop_bch(privkey, tokenid) {
 
     let balances = await SlpdbQueries.GetAddressListFor(-1, tokenid)
 
-    const slp_total = Array.from(
+    let slp_total = Array.from(
         balances.values()).reduce((a, c) => a.plus(c), new Big(0));
+    
 
     let keep = KEEP_AMOUNT
-    let balance = await get_bch_balance(privkey)
+    let [balance, our_slp] = await get_bch_balance(privkey, tokenid)
+    if (our_slp)
+        slp_total -= our_slp
     let dropamount = balance - keep - FEE
     if (dropamount <= 0) {
         throw Error("BCH balance in " + cashaddr + " too low for airdrop")
@@ -49,7 +53,10 @@ async function airdrop_bch(privkey, tokenid) {
     balances.forEach((v, k) => {
         k = SLP.Address.toLegacyAddress(k)
         let d = BITBOX.BitcoinCash.toSatoshi(v.div(slp_total).mul(dropamount).toFixed(8))
-        if(d > DUST_LIMIT) {
+        if (k == SLP.Address.toLegacyAddress(cashaddr)) {
+            // ignore as workaround for bug in slp-list, this is BURNED
+        }
+        else if(d > DUST_LIMIT) {
             outputs.push({ dst: k, amount: d })
         }
         else {
@@ -89,7 +96,7 @@ async function airdrop_bch(privkey, tokenid) {
 
    let tx = transactionBuilder.build()
    let txid = null
-  BITBOX.RawTransactions.sendRawTransaction(tx.toHex())
+   await BITBOX.RawTransactions.sendRawTransaction(tx.toHex())
     .then((result) => { txid = result }, (err) => { console.log(err); });
     return txid
 }
@@ -106,5 +113,6 @@ async function test() {
     catch (err) { console.log(err) }
 }
 
+exports.airdrop = airdrop_bch
 exports.get_balance = get_bch_balance
 // test

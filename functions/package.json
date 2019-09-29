@@ -26,8 +26,7 @@
     "slp-sdk": "^4.11.0",
     "slpjs": "^0.21.3",
     "xmlhttprequest": "1.8.0",
-    "cors": "^2.8.5",
-    "request": "^2.88.0"
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.1.6"
