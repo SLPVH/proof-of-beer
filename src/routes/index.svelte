@@ -39,10 +39,9 @@
 </svelte:head>
 <script>
 	import { authStore } from '../stores/auth'
-	import { userStore, tokenidStore } from '../stores/user'
+	import { userStore, tokenidStore, cashaddrStore, slpaddrStore, tokennameStore } from '../stores/user'
 	import fire from '../utils/fire'
 	import {goto} from '@sapper/app'
-
 
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (!user) {
@@ -61,11 +60,29 @@
 					})
 				});
 
-        fire.default.database().ref('users').child(user.uid)
-            .child('event').child('txid').once('value')
-		    .then(function(snapshot) {
-                tokenidStore.set(snapshot.val())
-		    });
+        const save_nested_to_store = (parentkey, key, store) => {
+            fire.default.database().ref('users').child(user.uid)
+                .child(parentkey).child(key).once('value')
+                .then(function(snapshot) {
+                    console.log(snapshot.val())
+                    store.set(snapshot.val())
+                });
+        };
+
+        const save_to_store = (key, store) => {
+            fire.default.database().ref('users').child(user.uid)
+                .child(key).once('value')
+                .then(function(snapshot) {
+                    console.log(snapshot.val())
+                    store.set(snapshot.val())
+                });
+        };
+
+        save_nested_to_store('event', 'txid', tokenidStore)
+        save_nested_to_store('event', 'token_name', tokennameStore)
+        save_to_store('cash_addr', cashaddrStore)
+        save_to_store('slp_addr', slpaddrStore)
+
 
 			/* fire.default.database().ref('users').child(user.uid).child('event')
 				.update({ eventName: "eventName"})*/
@@ -94,7 +111,37 @@
   </div>
 </div>
 {:else}
-    <p>You have an event running</p>
-{/if}
+<div class="container">
+<div class="row">
+<div class="col-sm-6">
 
+
+<div class="card" style="width: 400px;">
+  <div class="card-header">Bitcoin Cash</div>
+  <div class="card-body">
+     <h5 class="card-title">Buy beer with Bitcoin Cash</h5>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$cashaddrStore}" alt="bch QR"></div>
+</div> <!-- card-body -->
+</div> <!-- card -->
+
+</div> <!-- col-sm -->
+
+<div class="col-sm-6">
+
+<div class="card" style="width: 400px">
+  <div class="card-header">{$tokennameStore}</div>
+  <div class="card-body">
+     <h5 class="card-title">{$tokennameStore}</h5>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$slpaddrStore}" alt="bch QR"></div>
+</div> <!-- card-body -->
+</div> <!-- card -->
+
+</div> <!-- col-sm -->
+</div> <!-- row -->
+</div> <!-- container -->
+
+
+
+
+{/if}
 {/if}

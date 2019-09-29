@@ -7,3 +7,6 @@ export const userStore = writable({
 })
 
 export const tokenidStore = writable()
+export const cashaddrStore = writable()
+export const slpaddrStore = writable()
+export const tokennameStore = writable()
