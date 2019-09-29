@@ -1,6 +1,6 @@
 <script>
     import fire from '../../utils/fire'
-    const add_beer = fire.default.functions().httpsCallable('add_beer')
+    const add_beer = fire.default.functions().httpsCallable('mint_beer')
     
     let quantity="", dst_slpaddr=""
 

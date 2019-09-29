@@ -14,7 +14,7 @@ const request = require('request')
 const privkey_wif = "L4BwXDmjzEyzKHbAfGruhieUDPs8KTx7DMgqPk4aF9GefzgqPENV"
 const tokenid = "9c06d069cb63aafc40c50b4c1f45d48e4fae4f77577a052c64073e76c98c85db"
 const cors = require('cors')({
-    origin: true
+    origin: ['*']
   });
   
 firebase.initializeApp()
@@ -31,9 +31,9 @@ exports.create_token = functions.https.onCall(async (data, context) => {
         data.token_symbol
     ).catch((e)=>{
         console.log(e)
-        return(e)
+        return({error:e})
     }) 
-    return(txid)
+    return({txid})
 })
 
 exports.mint_beer = functions.https.onCall(async (data, context) => {
@@ -44,13 +44,17 @@ exports.mint_beer = functions.https.onCall(async (data, context) => {
         data.dst_slpaddr
     ).catch((e)=>{
         console.log(e)
-        return(e)
+        return({error:e})
     })
-    return(txid)
+    return({txid})
 })
 
-exports.end_event = fundtions.https.onCall(async (data, context) => {
-    const txid = await burn_beer(privkey_wif, tokenid).catch(e=>console.log(e))
+exports.end_event = functions.https.onCall(async (data, context) => {
+    const txid = await burn_beer(privkey_wif, tokenid).catch(e=>{
+        console.log(e)
+        return ({error:e})
+    })
+    return ({txid})
 })
 
 exports.createUserData = functions.auth.user().onCreate((user) => {
