@@ -6,6 +6,7 @@ const mint_beer = require('./mint').mint
 const burn_beer = require('./burn').burn
 const airdrop = require('./dropbch').airdrop
 let slputil = require("./slputil")
+const history = require('./history').history
 
 // We have to import the built version of the server middleware.
 const { sapper } = require('./__sapper__/build/server/server');
@@ -20,6 +21,16 @@ const cors = require('cors')({
 const admin = require('firebase-admin');
   
 firebase.initializeApp()
+
+exports.get_history = functions.https.onCall(async(data, context) => {
+    let user
+    await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
+        user = d.val()
+    })
+    const res = await history(user.event.txid)
+
+    return ({res})
+})
 
 exports.ssr = functions.https.onRequest((req, res) => {
     req.baseUrl = '';
