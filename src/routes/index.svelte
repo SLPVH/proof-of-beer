@@ -140,7 +140,14 @@
 </div> <!-- row -->
 </div> <!-- container -->
 
-
+<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link active" href="/create">➕ Mint beer</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/end">🙅 End event</a>
+  </li>
+</ul>
 
 
 {/if}
