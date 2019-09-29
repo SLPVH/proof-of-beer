@@ -26,7 +26,6 @@
 </style>
 <script context="module">
 	export async function preload(page, session) {
-
 		if (fire.default.auth().currentUser != null) {
 				  authStore.set({ authenticated: true })
 
@@ -40,18 +39,21 @@
 </svelte:head>
 <script>
 	import { authStore } from '../stores/auth'
-	import { userStore } from '../stores/user'
+	import { userStore, tokenidStore } from '../stores/user'
 	import fire from '../utils/fire'
 	import {goto} from '@sapper/app'
 
-	fire.default.auth().onAuthStateChanged(function(user) {
-		if (user) {
-			authStore.set({ authenticated: true })
 
-			console.log("lolol")
-			console.log(user.uid)
-			fire.default.database().ref('users').child(user.uid).child('cash_addr').once('value')
-				.then(function(snapshot) {
+	fire.default.auth().onAuthStateChanged(function(user) {
+		if (!user) {
+            authStore.set({ authenticated: false })
+            return;
+        }
+        authStore.set({ authenticated: true })
+
+        fire.default.database().ref('users').child(user.uid)
+            .child('cash_addr').once('value')
+		    .then(function(snapshot) {
 					var cashAddr = snapshot.val()
 					console.log(cashAddr)
 					userStore.set({
@@ -59,14 +61,16 @@
 					})
 				});
 
-			fire.default.database().ref('users').child(user.uid).child('event')
-				.update({ eventName: "eventName"})
+        fire.default.database().ref('users').child(user.uid)
+            .child('event').child('txid').once('value')
+		    .then(function(snapshot) {
+                tokenidStore.set(snapshot.val())
+		    });
 
-		} else {
-			      authStore.set({ authenticated: false })
-		}
-	});
+			/* fire.default.database().ref('users').child(user.uid).child('event')
+				.update({ eventName: "eventName"})*/
 
+		});
 </script>
 {#if !$authStore.authenticated}
 <div class="jumbotron">
@@ -78,6 +82,19 @@
         <p>Your attendees may pay for their drinks in Bitcoin Cash &mdash; or they may pay with a proof-of-beer token.</p>
 
         <p>At the end of the event, all income will be paid as divident to remaining token holders</p>
-          <a class="btn btn-primary btn-lg" href="#" role="button">Join the BETA</a>
+          <a class="btn btn-primary btn-lg" href="/#" role="button">Join the BETA</a>
           </div>
+{:else}
+{#if !$tokenidStore}
+<div class="card">
+  <div class="card-body">
+      <h5 class="card-title">Start an event</h5>
+      <p class="card-text">You don't have an event running. Start by creating an event.</p>
+      <a href="/create" class="btn btn-primary">Create an event</a>
+  </div>
+</div>
+{:else}
+    <p>You have an event running</p>
+{/if}
+
 {/if}
