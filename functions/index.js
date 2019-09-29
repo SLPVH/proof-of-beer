@@ -55,7 +55,7 @@ exports.mint_beer = functions.https.onCall(async (data, context) => {
         user = d.val()
     })
     const txid = await mint_beer(
-        users.event.txid,
+        user.event.txid,
         data.quantity,
         user.private_key,
         data.dst_slpaddr
@@ -71,7 +71,7 @@ exports.end_event = functions.https.onCall(async (data, context) => {
     await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
         user = d.val()
     })
-    const txid = await burn_beer(user.private_key, users.event.txid).catch(e=>{
+    const txid = await burn_beer(user.private_key, user.event.txid).catch(e=>{
         console.log(e)
         return ({error:e})
     })
