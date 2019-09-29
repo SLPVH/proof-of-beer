@@ -7,7 +7,7 @@
 
     const handleClick = async () => {
         console.log(name, ticker, url, price)
-        const txio = await create_token({token_name:name, token_symbol:ticker})
+        const txio = await create_token({token_name:name, token_symbol:ticker, price, url})
         console.log(txio)
     }
 </script>

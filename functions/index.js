@@ -11,11 +11,12 @@ const { sapper } = require('./__sapper__/build/server/server');
 const middleware = sapper.middleware();
 const request = require('request')
 
-const privkey_wif = "L4BwXDmjzEyzKHbAfGruhieUDPs8KTx7DMgqPk4aF9GefzgqPENV"
 const tokenid = "9c06d069cb63aafc40c50b4c1f45d48e4fae4f77577a052c64073e76c98c85db"
 const cors = require('cors')({
     origin: ['*']
   });
+
+const admin = require('firebase-admin');
   
 firebase.initializeApp()
 
@@ -25,22 +26,38 @@ exports.ssr = functions.https.onRequest((req, res) => {
 });
 
 exports.create_token = functions.https.onCall(async (data, context) => {
+    let user
+    await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
+        user = d.val()
+    })
     const txid = await create_event(
-        privkey_wif,
+        user.private_key,
         data.token_name,
         data.token_symbol
     ).catch((e)=>{
         console.log(e)
         return({error:e})
-    }) 
+    })
+    await admin.database().ref('users').child(context.auth.uid).child('event')
+    .set({
+        txid: txid,
+        token_name: data.token_name,
+        token_symbol: data.token_symbol,
+        price: data.price,
+        url: data.url
+    })
     return({txid})
 })
 
 exports.mint_beer = functions.https.onCall(async (data, context) => {
+    let user
+    await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
+        user = d.val()
+    })
     const txid = await mint_beer(
-        tokenid,
+        users.event.txid,
         data.quantity,
-        privkey_wif,
+        user.private_key,
         data.dst_slpaddr
     ).catch((e)=>{
         console.log(e)
@@ -50,10 +67,16 @@ exports.mint_beer = functions.https.onCall(async (data, context) => {
 })
 
 exports.end_event = functions.https.onCall(async (data, context) => {
-    const txid = await burn_beer(privkey_wif, tokenid).catch(e=>{
+    let user
+    await admin.database().ref('users').child(context.auth.uid).once("value").then(d=>{
+        user = d.val()
+    })
+    const txid = await burn_beer(user.private_key, users.event.txid).catch(e=>{
         console.log(e)
         return ({error:e})
     })
+    await admin.database().ref('users').child(context.auth.uid).child('event')
+    .set({eventName: "eventName"})
     return ({txid})
 })
 
