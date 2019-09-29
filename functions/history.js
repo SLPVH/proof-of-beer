@@ -1,10 +1,11 @@
+
 const slp = require('slp-sdk')
 const SLP = new slp()
 
 const NERD = "364f1366f32a4d3b15945300964e824754fc5434a3ee892b7718a912a464f56a"
 
 
-function render_output(output) {
+function output_as_emoji(output) {
     res = ""
     for (var i = 0; i < output['amount']; ++i) {
         res += "🍺"
@@ -24,48 +25,33 @@ async function token_history (tokenid, fridge_addr) {
         "$or": [ { "slp.detail.transactionType": "SEND"}, { "slp.detail.transactionType": "MINT" }]
     }}})
 
-    events = [ ]
+    let events = [ ]
 
     res['c'].forEach((entry) => {
         type = entry['slp']['detail']['transactionType']
+        outputs = [ ]
 
-        if (type == "MINT") {
-           entry['slp']['detail']['outputs'].forEach((out) => {
-              console.log("WOW! NEW BEER! " + render_output(out))
-           })
-        }
-        if (type == "SEND") {
-           entry['slp']['detail']['outputs'].forEach((out) => {
-              console.log("CHHERS! A TRANSFER! " + render_output(out))
-           })
+        entry['slp']['detail']['outputs'].forEach((out) => {
+            outputs.push(output_as_emoji(out))
+        })
 
-
-
-        }
-        /*console.log(type)
-        // e['type'] = entry['slp']['detail']['transactionType'];
-        entry['slp']['detail']['outputs'].forEach((o) => {
-            console.log(o)
-        })*/
+        events.push({
+            'type': type,
+            'outputs': outputs
+        })
     })
-    // console.log(res['c'])
+    return events
 }
-token_history(NERD)
 
+async function test_history() {
+    try {
+        let h = await token_history("9c06d069cb63aafc40c50b4c1f45d48e4fae4f77577a052c64073e76c98c85db")
+        console.log(h)
+    }
+    catch (err) {
+        console.log(err)
+    }
+ }
 
-/*
-let socket = new SLP.Socket({
-    callback: () => {
-        console.log("connected")
-    },
-})
-
-socket.listen({
-  "v": 3,
-  "q": {
-  "find": {
-    "slp.valid": true,
-    "slp.detail.tokenIdHex": tokenid,
-    "$or": [ { "slp.detail.transactionType": "SEND"}, { "slp.detail.transactionType": "MINT" }]
-}}},    function(data) { console.log(data) }) */
-
+// test_history()
+exports.history = token_history
