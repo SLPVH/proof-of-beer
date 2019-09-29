@@ -79,16 +79,19 @@
 
 <nav>
 {#if $authStore.authenticated}
-  	<button on:click={signOut}> Sign out </button>
+  	<button on:click={signOut} type="buton" class="btn btn-secondary">Sign out</button>
   {:else}
-	<p>Email:</p>
-	<input bind:value={email} type="email" />
-	<p>Password:</p>
-	<input bind:value={password} type="password" />
-	<button on:click={signIn}> Sign in </button>
+    <div class="alert alert-primary" role="alert">Sign in to start &mdash; or ask to join our beta.</div>
+    <div class="input-group mb-3" style="width: 50em;">
+	<input bind:value={email} type="email" class="form-control"
+        placeholder="E-mail" aria-label="E-mail" aria-describedby="basic-addon1">
+	<input bind:value={password} type="password" class="form-control"
+        placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+	<button type="button" on:click={signIn} class="btn btn-primary"> Sign in </button>
+    </div>
   {/if}
 
-	<ul>
+	<ul><!--
 		{#if $authStore.authenticated}
 		<li><a class='{segment === "create" ? "selected" : ""}' href='create'>create token</a></li>
 		<li><a class='{segment === "add" ? "selected" : ""}' href='add'>add beer</a></li>
@@ -96,6 +99,6 @@
 		{/if}
 		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>start</a></li>
 		<li><a class='{segment === "about" ? "selected" : ""}' href='about'>about</a></li>
-		
+    -->
 	</ul>
 </nav>
