@@ -25,7 +25,8 @@
 	export async function preload(page, session) {
 
 		if (fire.default.auth().currentUser != null) {
-			      authStore.set({ authenticated: true })
+				  authStore.set({ authenticated: true })
+				  
 		}
 		return "asd"
 	}
@@ -36,12 +37,28 @@
 </svelte:head>
 <script>
 	import { authStore } from '../stores/auth'
+	import { userStore } from '../stores/user'
 	import fire from '../utils/fire'
 	import {goto} from '@sapper/app'
 
 	fire.default.auth().onAuthStateChanged(function(user) {
 		if (user) {
-			      authStore.set({ authenticated: true })
+			authStore.set({ authenticated: true })
+			
+			console.log("lolol")
+			console.log(user.uid)
+			fire.default.database().ref('users').child(user.uid).child('cash_addr').once('value')
+				.then(function(snapshot) {
+					var cashAddr = snapshot.val()
+					console.log(cashAddr)
+					userStore.set({
+						cash_addr: cashAddr,
+					})
+				});
+		
+			fire.default.database().ref('users').child(user.uid).child('event')
+				.update({ eventName: "eventName"})
+			
 		} else {
 			      authStore.set({ authenticated: false })
 		}

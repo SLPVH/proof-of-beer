@@ -26,6 +26,7 @@
 		});
 		authStore.set({ authenticated: true})
 	}
+
 	export let segment;
 
 </script>
