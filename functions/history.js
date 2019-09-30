@@ -10,7 +10,7 @@ function output_as_emoji(output) {
     for (var i = 0; i < output['amount']; ++i) {
         res += "🍺"
     }
-    res += " 👉 " + output['address']
+    res += " 👉 " + output['address'].substr(13, 4) + "..." + output['address'].substr(-4, 4)
     return res
 }
 
@@ -32,7 +32,28 @@ async function token_history (tokenid, fridge_addr) {
         outputs = [ ]
 
         entry['slp']['detail']['outputs'].forEach((out) => {
-            outputs.push(output_as_emoji(out))
+            outputs.push({
+                "str": output_as_emoji(out),
+                "addr": out['address']
+            })
+
+        })
+
+        events.push({
+            'type': type,
+            'outputs': outputs
+        })
+    })
+    res['u'].forEach((entry) => {
+        type = entry['slp']['detail']['transactionType']
+        outputs = [ ]
+
+        entry['slp']['detail']['outputs'].forEach((out) => {
+            outputs.push({
+                "str": output_as_emoji(out),
+                "addr": out['address']
+            })
+
         })
 
         events.push({

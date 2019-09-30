@@ -10,10 +10,27 @@
         console.log(txio)
         goto('/')
     }
+    const back = async () => {
+        goto('/')
+    }
 </script>
-<div class="card">
-    <div class="card-body">
-        <h2>End Event</h2>
-        <button class="btn btn-primary" on:click="{endevent}">End event</button>
+<style>
+.main {
+    display: flex;
+    flex-direction: row;
+}
+</style>
+<div class="main">
+    <div class="card">
+        <div class="card-body">
+            <h2>End Event</h2>
+            <button class="btn btn-primary" on:click="{endevent}">End event</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h2>Back to dashboard</h2>
+            <button class="btn btn-primary" on:click="{back}">Back</button>
+        </div>
     </div>
 </div>
