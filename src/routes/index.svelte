@@ -39,7 +39,7 @@
 </svelte:head>
 <script>
 	import { authStore } from '../stores/auth'
-	import { userStore, tokenidStore, cashaddrStore, slpaddrStore, tokennameStore } from '../stores/user'
+	import { userStore, tokenidStore, cashaddrStore, slpaddrStore, tokennameStore, historyStore } from '../stores/user'
 	import fire from '../utils/fire'
 	import {goto} from '@sapper/app'
 
@@ -50,21 +50,10 @@
         }
         authStore.set({ authenticated: true })
 
-        fire.default.database().ref('users').child(user.uid)
-            .child('cash_addr').once('value')
-		    .then(function(snapshot) {
-					var cashAddr = snapshot.val()
-					console.log(cashAddr)
-					userStore.set({
-						cash_addr: cashAddr,
-					})
-				});
-
         const save_nested_to_store = (parentkey, key, store) => {
             fire.default.database().ref('users').child(user.uid)
                 .child(parentkey).child(key).once('value')
                 .then(function(snapshot) {
-                    console.log(snapshot.val())
                     store.set(snapshot.val())
                 });
         };
@@ -73,7 +62,6 @@
             fire.default.database().ref('users').child(user.uid)
                 .child(key).once('value')
                 .then(function(snapshot) {
-                    console.log(snapshot.val())
                     store.set(snapshot.val())
                 });
         };
@@ -84,10 +72,25 @@
         save_to_store('slp_addr', slpaddrStore)
 
 
+
 			/* fire.default.database().ref('users').child(user.uid).child('event')
 				.update({ eventName: "eventName"})*/
 
 		});
+        const history = fire.default.functions().httpsCallable('get_history')
+
+        const update_history = async () => {
+            try {
+                let h = await history()
+                console.log(h.data.res)
+                historyStore.set(h.data.res)
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }
+
+
 </script>
 {#if !$authStore.authenticated}
 <div class="jumbotron">
@@ -120,7 +123,10 @@
   <div class="card-header">Bitcoin Cash</div>
   <div class="card-body">
      <h5 class="card-title">Buy beer with Bitcoin Cash</h5>
-    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$cashaddrStore}" alt="bch QR"></div>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$cashaddrStore}" alt="bch QR"><br />
+   <span style="font-size: 60%"><a href="https://explorer.bitcoin.com/bch/address/{$cashaddrStore}">{$cashaddrStore}</a></span>
+
+    </div>
 </div> <!-- card-body -->
 </div> <!-- card -->
 
@@ -132,7 +138,9 @@
   <div class="card-header">{$tokennameStore}</div>
   <div class="card-body">
      <h5 class="card-title">{$tokennameStore}</h5>
-    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$slpaddrStore}" alt="bch QR"></div>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$slpaddrStore}" alt="bch QR"><br />
+   <span style="font-size: 60%"><a href="https://explorer.bitcoin.com/bch/address/{$slpaddrStore}">{$slpaddrStore}</a></span>
+    </div>
 </div> <!-- card-body -->
 </div> <!-- card -->
 
@@ -140,15 +148,37 @@
 </div> <!-- row -->
 </div> <!-- container -->
 
-<ul class="nav flex-column">
+<ul class="nav nav-pills">
   <li class="nav-item">
-    <a class="nav-link active" href="/add">➕ Mint beer</a>
+    <a class="nav-link " href="/add">➕ Mint beer</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/end">🙅 End event</a>
+    <a class="nav-link " href="/end">🙅 End event</a>
   </li>
+  <li class="nav-item">
+<button on:click={update_history} type="buton" class="btn ">🍻 Update history</button>
+    </li>
 </ul>
 
+
+<div class="list-group" style="margin-top: 1em;">
+
+{#each $historyStore as entry}
+
+ <a href="/#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{entry.type}</h5>
+      <small class="text-muted">Moments ago</small>
+    </div>
+
+    {#each entry.outputs as o}
+    <p class="mb-1">{o.str}</p>
+    {/each}
+
+    <small class="text-muted">Cheers!</small>
+  </a>
+{/each}
+</div> <!-- list group -->
 
 {/if}
 {/if}
