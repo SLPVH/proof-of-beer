@@ -1,13 +1,16 @@
 <script>
     import fire from '../../utils/fire'
     import {goto} from '@sapper/app'
+    import { mintStore } from '../../stores/user'
     const add_beer = fire.default.functions().httpsCallable('mint_beer')
     
     let quantity="", dst_slpaddr=""
-
+    let txiostr = ""
     const handleClick = async () => {
         console.log(quantity, dst_slpaddr)
         const txio = await add_beer({quantity, dst_slpaddr})
+        txiostr = `https://explorer.bitcoin.com/bch/tx/${txio.data.txid}`
+        mintStore.set(txiostr)
         console.log(txio)
     }
 
@@ -41,3 +44,6 @@
         </div>
     </div>
 </div>
+{#if $mintStore}
+<p>Click <a href={$mintStore} target="_blank">here</a> to see the transaction</p>
+{/if}
