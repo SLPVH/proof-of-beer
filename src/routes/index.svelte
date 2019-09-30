@@ -123,7 +123,10 @@
   <div class="card-header">Bitcoin Cash</div>
   <div class="card-body">
      <h5 class="card-title">Buy beer with Bitcoin Cash</h5>
-    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$cashaddrStore}" alt="bch QR"></div>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$cashaddrStore}" alt="bch QR"><br />
+   <span style="font-size: 60%"><a href="https://explorer.bitcoin.com/bch/address/{$cashaddrStore}">{$cashaddrStore}</a></span>
+
+    </div>
 </div> <!-- card-body -->
 </div> <!-- card -->
 
@@ -135,7 +138,9 @@
   <div class="card-header">{$tokennameStore}</div>
   <div class="card-body">
      <h5 class="card-title">{$tokennameStore}</h5>
-    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$slpaddrStore}" alt="bch QR"></div>
+    <div class="card-text"><img src="https://api.qrserver.com/v1/create-qr-code/?qzone=3&size=350x350&data={$slpaddrStore}" alt="bch QR"><br />
+   <span style="font-size: 60%"><a href="https://explorer.bitcoin.com/bch/address/{$slpaddrStore}">{$slpaddrStore}</a></span>
+    </div>
 </div> <!-- card-body -->
 </div> <!-- card -->
 
@@ -170,7 +175,7 @@
     <p class="mb-1">{o.str}</p>
     {/each}
 
-    <small class="text-muted">Donec id elit non mi porta.</small>
+    <small class="text-muted">Cheers!</small>
   </a>
 {/each}
 </div> <!-- list group -->
