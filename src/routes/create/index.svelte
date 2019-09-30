@@ -1,6 +1,7 @@
 
 <script>
     import fire from '../../utils/fire'
+    import {goto} from '@sapper/app'
     const create_token = fire.default.functions().httpsCallable('create_token')
     
     let name="", ticker="", url="", price=0
@@ -9,13 +10,7 @@
         console.log(name, ticker, url, price)
         const txio = await create_token({token_name:name, token_symbol:ticker, price, url})
         console.log(txio)
-    }
-    const end_event = fire.default.functions().httpsCallable('end_event')
-
-    const endevent = async () => {
-        console.log("ending event")
-        const txio = await end_event()
-        console.log(txio)
+        goto('/')
     }
 
     const history = fire.default.functions().httpsCallable('get_history')
